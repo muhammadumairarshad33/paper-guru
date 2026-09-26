@@ -1,0 +1,6 @@
+{
+  "name": "Paper Guru",
+  "description": "Past papers browser and viewer for 9th and 10th class subjects including Chemistry and Mathematics",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

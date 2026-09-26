@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Paper Guru</string>
+    <string name="select_class">Select Class</string>
+    <string name="class_9th">9th Class</string>
+    <string name="class_10th">10th Class</string>
+    <string name="subtitle_urdu">Past Papers دیکھنے کے لیے click کریں</string>
+    <string name="select_year_urdu">Past Paper کا سال منتخب کریں</string>
+    <string name="view_paper">View Paper</string>
+    <string name="download_paper">Download Paper</string>
+    <string name="download_not_ready">Download feature اگلے مرحلے میں add ہو گا۔</string>
+    <string name="paper_not_uploaded">یہ paper ابھی upload نہیں ہوا۔</string>
+</resources>
