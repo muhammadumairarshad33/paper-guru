@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Authentication helpers
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Check if user has active PRO membership in their user profile document
+    function isPaidMember() {
+      return isAuthenticated() && (
+        request.auth.token.isPaidMember == true ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isPaidMember == true)
+      );
+    }
+
+    // 1. Papers Collection:
+    // Free-tier and guest users can read general paper catalog (subject, year, board, basic PDF metadata).
+    match /papers/{paperId} {
+      allow read: if true;
+      allow write: if isAuthenticated() && request.auth.token.admin == true;
+
+      // Protected: Sensitive Step-by-Step Solutions (PRO members only)
+      match /solutions/{solutionId} {
+        allow read: if isPaidMember();
+        allow write: if isAuthenticated() && request.auth.token.admin == true;
+      }
+
+      // Protected: Next Exam Inspiration & High-Yield FAQs (PRO members only)
+      match /inspiration/{insightId} {
+        allow read: if isPaidMember();
+        allow write: if isAuthenticated() && request.auth.token.admin == true;
+      }
+    }
+
+    // 2. Users Collection:
+    // Each authenticated user can read & update their own account profile and synced bookmarks.
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create, update: if isOwner(userId);
+      allow delete: if isOwner(userId);
+
+      match /bookmarks/{bookmarkId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+  }
+}
